@@ -1,2 +1,4 @@
 add_subdirectory("corec")
-add_subdirectory("tests")
+if (MATROSKA2_TESTS)
+    add_subdirectory("tests")
+endif ()

@@ -68,7 +68,7 @@ if (CONFIG_BZLIB)
 endif(CONFIG_BZLIB)
 
 if (CONFIG_CODEC_HELPER)
-  add_subdirectory("tremor")
+  add_subdirectory("tremor" EXCLUDE_FROM_ALL)
   target_link_libraries("matroska2" PRIVATE $<BUILD_INTERFACE:tremor>)
 endif(CONFIG_CODEC_HELPER)
 
@@ -94,8 +94,10 @@ install(TARGETS "matroska2"
 # CMake file to import libmatroska2
 install(EXPORT Matroska2 DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/matroska2)
 
-add_executable("mkvtree" test/mkvtree.c)
-target_link_libraries("mkvtree" PRIVATE "matroska2" "ebml2" "corec")
+if (MATROSKA2_TOOLS)
+  add_executable("mkvtree" test/mkvtree.c)
+  target_link_libraries("mkvtree" PRIVATE "matroska2" "ebml2" "corec")
+endif ()
 
 if (0)
 add_library("matroska2_haali" MatroskaParser/MatroskaParser.c)

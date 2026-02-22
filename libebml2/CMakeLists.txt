@@ -66,9 +66,11 @@ install(TARGETS "ebml2"
 install(EXPORT Ebml2 DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ebml2)
 
 
-# TODO fix build
-add_executable("ebmltree" test/ebmltree.c)
-target_link_libraries("ebmltree" PUBLIC "ebml2" "corec")
+if (MATROSKA2_TOOLS)
+  # TODO fix build
+  add_executable("ebmltree" test/ebmltree.c)
+  target_link_libraries("ebmltree" PUBLIC "ebml2" "corec")
+endif ()
 
 # TODO finish this
 # configure_file(legacy/ebml2_legacy_project.h.in legacy/ebml2_legacy_project.h)
