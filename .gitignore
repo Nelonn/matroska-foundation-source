@@ -8,6 +8,8 @@ GNUmakefile
 /release/
 /spectool/spec.xml
 *.exe
+.idea
+cmake-build-**
 
 *.config
 *.creator

@@ -5,24 +5,20 @@ option(CONFIG_BZLIB "Enable bzlib decompression in libmatroska2" ON)
 option(CONFIG_LZO1X "Enable lzo decompression in libmatroska2" ON)
 option(CONFIG_CODEC_HELPER "Enable Vorbis frame durations in libmatroska2" ON)
 
-if (CONFIG_ZLIB)
+if (CONFIG_ZLIB AND NOT TARGET ZLIB::ZLIB)
   include(FindZLIB)
 
   if(NOT ZLIB_FOUND)
     include(FetchContent)
 
-    set(ZLIB_BUILD_EXAMPLES OFF)
-    set(ZLIB_BUILD_SHARED OFF)
-    set(ZLIB_BUILD_TESTING OFF)
-
     FetchContent_Declare(
         zlib
-        GIT_REPOSITORY https://github.com/madler/zlib.git
-        GIT_TAG 5a82f71ed1dfc0bec044d9702463dbdf84ea3b71
+        GIT_REPOSITORY https://github.com/Nelonn/zlib-ng
+        GIT_TAG b583a325937227d7834ae541cf88c1f273da113e
     )
 
     FetchContent_MakeAvailable(zlib)
-    target_compile_definitions("zlibstatic" PRIVATE NO_GZIP)
+    target_compile_definitions(zlib-ng PRIVATE NO_GZIP)
   endif()
 endif()
 
@@ -52,12 +48,7 @@ target_include_directories("matroska2"
 target_include_directories("matroska2" PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>)
 
 if (CONFIG_ZLIB)
-  if(ZLIB_FOUND)
-    target_include_directories("matroska2" PRIVATE ${ZLIB_INCLUDE_DIRS})
-    target_link_libraries("matroska2" PRIVATE ${ZLIB_LIBRARIES})
-  else()
-    target_link_libraries("matroska2" PRIVATE $<BUILD_INTERFACE:zlibstatic>)
-  endif()
+  target_link_libraries("matroska2" PRIVATE ZLIB::ZLIB)
 endif(CONFIG_ZLIB)
 
 if (CONFIG_LZO1X)
