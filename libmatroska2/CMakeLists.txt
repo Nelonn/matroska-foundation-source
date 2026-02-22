@@ -87,7 +87,7 @@ include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
 
 configure_package_config_file(
-        cmake/matroska2Config.cmake.in
+        matroska2Config.cmake.in
         ${CMAKE_CURRENT_BINARY_DIR}/matroska2Config.cmake
         INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/matroska2
 )
@@ -99,15 +99,15 @@ write_basic_package_version_file(
 )
 
 install(TARGETS matroska2
-        EXPORT Matroska2Targets
+        EXPORT matroska2Targets
         PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/matroska2
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
-install(EXPORT Matroska2Targets
-        FILE Matroska2Targets.cmake
+install(EXPORT matroska2Targets
+        FILE matroska2Targets.cmake
         NAMESPACE matroska2::
         DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/matroska2
 )
