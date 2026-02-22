@@ -23,7 +23,8 @@ set(ebml2_INTERNAL_HEADERS
   ${CMAKE_CURRENT_SOURCE_DIR}/ebmlcrc.h
 )
 add_library("ebml2")
-target_sources("ebml2" PRIVATE 
+add_library(ebml2::ebml2 ALIAS ebml2)
+target_sources("ebml2" PRIVATE
   ${ebml2_SOURCES} 
   ${ebml2_PUBLIC_HEADERS} 
   ${ebml2_INTERNAL_HEADERS}
