@@ -38,7 +38,7 @@ set_target_properties("ebml2" PROPERTIES
 )
 
 # the library needs to be static as it shares constants variables
-target_link_libraries("ebml2" PUBLIC "corec")
+target_link_libraries("ebml2" PUBLIC corec::corec)
 
 target_include_directories("ebml2"
   PRIVATE

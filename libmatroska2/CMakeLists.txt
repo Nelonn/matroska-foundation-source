@@ -79,7 +79,7 @@ set_target_properties("matroska2" PROPERTIES
 configure_file(matroska_config.h.in matroska2/matroska_config.h)
 
 # the library needs to be static as it shares constants variables
-target_link_libraries("matroska2" PUBLIC "ebml2")
+target_link_libraries("matroska2" PUBLIC ebml2::ebml2)
 if (BUILD_SHARED_LIBS)
   target_compile_definitions("matroska2" INTERFACE matroska2_IMPORTS)
 endif (BUILD_SHARED_LIBS)
