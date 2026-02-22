@@ -56,55 +56,41 @@ if (BUILD_SHARED_LIBS)
 endif (BUILD_SHARED_LIBS)
 
 include(GNUInstallDirs)
+include(CMakePackageConfigHelpers)
 
-install(TARGETS "ebml2" 
-  EXPORT Ebml2
+# Generate package config file
+configure_package_config_file(
+  ${CMAKE_CURRENT_SOURCE_DIR}/Ebml2Config.cmake.in
+  ${CMAKE_CURRENT_BINARY_DIR}/Ebml2Config.cmake
+  INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ebml2
+)
+
+write_basic_package_version_file(
+  ${CMAKE_CURRENT_BINARY_DIR}/Ebml2ConfigVersion.cmake
+  VERSION ${PROJECT_VERSION}
+  COMPATIBILITY SameMajorVersion
+)
+
+install(TARGETS "ebml2"
+  EXPORT Ebml2Targets
   PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/ebml2
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
-# CMake file to import libebml2
-install(EXPORT Ebml2 DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ebml2)
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+
+# Install CMake package configuration files
+install(EXPORT Ebml2Targets
+  FILE Ebml2Targets.cmake
+  NAMESPACE ebml2::
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ebml2)
+
+install(FILES
+  ${CMAKE_CURRENT_BINARY_DIR}/Ebml2Config.cmake
+  ${CMAKE_CURRENT_BINARY_DIR}/Ebml2ConfigVersion.cmake
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ebml2)
 
 
 if (MATROSKA2_TOOLS)
-  # TODO fix build
   add_executable("ebmltree" test/ebmltree.c)
   target_link_libraries("ebmltree" PUBLIC "ebml2" "corec")
 endif ()
-
-# TODO finish this
-# configure_file(legacy/ebml2_legacy_project.h.in legacy/ebml2_legacy_project.h)
-# set(LEGACY_LIBEBML_PUBLIC_HEADERS
-#   legacy/ebml/EbmlBinary.h
-#   legacy/ebml/EbmlConfig.h
-#   legacy/ebml/EbmlContexts.h
-#   legacy/ebml/EbmlCrc32.h
-#   legacy/ebml/EbmlDate.h
-#   legacy/ebml/EbmlDummy.h
-#   legacy/ebml/EbmlElement.h
-#   legacy/ebml/EbmlFloat.h
-#   legacy/ebml/EbmlHead.h
-#   legacy/ebml/EbmlId.h
-#   legacy/ebml/EbmlMaster.h
-#   legacy/ebml/EbmlSInteger.h
-#   legacy/ebml/EbmlStream.h
-#   legacy/ebml/EbmlString.h
-#   legacy/ebml/EbmlSubHead.h
-#   legacy/ebml/EbmlTypes.h
-#   legacy/ebml/EbmlUInteger.h
-#   legacy/ebml/EbmlUnicodeString.h
-#   legacy/ebml/EbmlVersion.h
-#   legacy/ebml/EbmlVoid.h
-#   legacy/ebml/IOCallback.h
-#   legacy/ebml/c/libebml_t.h
-# )
-#add_library("ebml2_legacy" 
-#  legacy/legacy.cpp
-#  ${ebml2_SOURCES}
-#  ${LEGACY_LIBEBML_PUBLIC_HEADERS}
-#)
-# target_compile_definitions("ebml2_legacy" PUBLIC EBML_STRICT_API)
-# target_compile_definitions("ebml2_legacy" PRIVATE EBML_LEGACY_API)
-# target_link_libraries("ebml2_legacy" PUBLIC "ebml2")
-# target_include_directories("ebml2_legacy" PUBLIC "legacy")
-

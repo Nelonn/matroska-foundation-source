@@ -37,12 +37,11 @@ set(matroska2_PUBLIC_HEADERS
 add_library("matroska2")
 target_sources("matroska2" PRIVATE ${matroska2_SOURCES} ${matroska2_PUBLIC_HEADERS})
 
-target_include_directories("matroska2"
-  PRIVATE
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
-  PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+target_include_directories(matroska2
+        PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
+        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
 # keep until the sources are split
 target_include_directories("matroska2" PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>)
@@ -81,27 +80,45 @@ configure_file(matroska_config.h.in matroska2/matroska_config.h)
 # the library needs to be static as it shares constants variables
 target_link_libraries("matroska2" PUBLIC "ebml2")
 if (BUILD_SHARED_LIBS)
-  target_compile_definitions("matroska2" PUBLIC matroska2_IMPORTS)
+  target_compile_definitions("matroska2" INTERFACE matroska2_IMPORTS)
 endif (BUILD_SHARED_LIBS)
 
 include(GNUInstallDirs)
+include(CMakePackageConfigHelpers)
 
-install(TARGETS "matroska2"
-  EXPORT Matroska2
-  PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/matroska2
-  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
-# CMake file to import libmatroska2
-install(EXPORT Matroska2 DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/matroska2)
+configure_package_config_file(
+        cmake/matroska2Config.cmake.in
+        ${CMAKE_CURRENT_BINARY_DIR}/matroska2Config.cmake
+        INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/matroska2
+)
+
+write_basic_package_version_file(
+        ${CMAKE_CURRENT_BINARY_DIR}/matroska2ConfigVersion.cmake
+        VERSION ${PROJECT_VERSION}
+        COMPATIBILITY SameMajorVersion
+)
+
+install(TARGETS matroska2
+        EXPORT Matroska2Targets
+        PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/matroska2
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
+
+install(EXPORT Matroska2Targets
+        FILE Matroska2Targets.cmake
+        NAMESPACE matroska2::
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/matroska2
+)
+
+install(FILES
+        ${CMAKE_CURRENT_BINARY_DIR}/matroska2Config.cmake
+        ${CMAKE_CURRENT_BINARY_DIR}/matroska2ConfigVersion.cmake
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/matroska2
+)
 
 if (MATROSKA2_TOOLS)
   add_executable("mkvtree" test/mkvtree.c)
   target_link_libraries("mkvtree" PRIVATE "matroska2" "ebml2" "corec")
 endif ()
-
-if (0)
-add_library("matroska2_haali" MatroskaParser/MatroskaParser.c)
-target_include_directories("matroska2_haali" PUBLIC "." "MatroskaParser")
-set_target_properties("matroska2_haali" PROPERTIES PUBLIC_HEADER "MatroskaParser/MatroskaParser.h")
-target_link_libraries("matroska2_haali" PRIVATE "matroska2")
-endif()
