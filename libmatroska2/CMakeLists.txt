@@ -35,6 +35,7 @@ set(matroska2_PUBLIC_HEADERS
 )
 
 add_library("matroska2")
+add_library(matroska2::matroska2 ALIAS matroska2)
 target_sources("matroska2" PRIVATE ${matroska2_SOURCES} ${matroska2_PUBLIC_HEADERS})
 
 target_include_directories(matroska2
