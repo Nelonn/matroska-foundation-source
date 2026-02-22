@@ -114,6 +114,8 @@ set(corec_PUBLIC_HEADERS
 
 # Create the library
 add_library(corec ${corec_SOURCES} ${corec_PUBLIC_HEADERS})
+add_library(corec::corec ALIAS corec)
+
 set_target_properties(corec PROPERTIES
     C_STANDARD 11
     PUBLIC_HEADER "${corec_PUBLIC_HEADERS}"
@@ -158,7 +160,7 @@ endif()
 
 # Installation
 install(TARGETS corec
-    EXPORT CoreCTargets
+    EXPORT corecTargets
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
@@ -203,25 +205,25 @@ install(FILES corec/node/corec.html
 
 # Generate and install CMake package configuration files
 write_basic_package_version_file(
-    "${CMAKE_CURRENT_BINARY_DIR}/CoreCConfigVersion.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/corecConfigVersion.cmake"
     VERSION ${PROJECT_VERSION}
     COMPATIBILITY SameMajorVersion
 )
 
 configure_package_config_file(
-    ${CMAKE_CURRENT_SOURCE_DIR}/CoreCConfig.cmake.in
-    ${CMAKE_CURRENT_BINARY_DIR}/CoreCConfig.cmake
+    ${CMAKE_CURRENT_SOURCE_DIR}/corecConfig.cmake.in
+    ${CMAKE_CURRENT_BINARY_DIR}/corecConfig.cmake
     INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/corec
 )
 
-install(EXPORT CoreCTargets
-    FILE CoreCTargets.cmake
-    NAMESPACE CoreC::
+install(EXPORT corecTargets
+    FILE corecTargets.cmake
+    NAMESPACE corec::
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/corec
 )
 
 install(FILES
-    ${CMAKE_CURRENT_BINARY_DIR}/CoreCConfig.cmake
-    ${CMAKE_CURRENT_BINARY_DIR}/CoreCConfigVersion.cmake
+    ${CMAKE_CURRENT_BINARY_DIR}/corecConfig.cmake
+    ${CMAKE_CURRENT_BINARY_DIR}/corecConfigVersion.cmake
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/corec
 )

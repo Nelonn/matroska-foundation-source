@@ -61,33 +61,33 @@ include(CMakePackageConfigHelpers)
 
 # Generate package config file
 configure_package_config_file(
-  ${CMAKE_CURRENT_SOURCE_DIR}/Ebml2Config.cmake.in
-  ${CMAKE_CURRENT_BINARY_DIR}/Ebml2Config.cmake
+  ${CMAKE_CURRENT_SOURCE_DIR}/ebml2Config.cmake.in
+  ${CMAKE_CURRENT_BINARY_DIR}/ebml2Config.cmake
   INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ebml2
 )
 
 write_basic_package_version_file(
-  ${CMAKE_CURRENT_BINARY_DIR}/Ebml2ConfigVersion.cmake
+  ${CMAKE_CURRENT_BINARY_DIR}/ebml2ConfigVersion.cmake
   VERSION ${PROJECT_VERSION}
   COMPATIBILITY SameMajorVersion
 )
 
 install(TARGETS "ebml2"
-  EXPORT Ebml2Targets
+  EXPORT ebml2Targets
   PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/ebml2
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 
 # Install CMake package configuration files
-install(EXPORT Ebml2Targets
-  FILE Ebml2Targets.cmake
+install(EXPORT ebml2Targets
+  FILE ebml2Targets.cmake
   NAMESPACE ebml2::
   DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ebml2)
 
 install(FILES
-  ${CMAKE_CURRENT_BINARY_DIR}/Ebml2Config.cmake
-  ${CMAKE_CURRENT_BINARY_DIR}/Ebml2ConfigVersion.cmake
+  ${CMAKE_CURRENT_BINARY_DIR}/ebml2Config.cmake
+  ${CMAKE_CURRENT_BINARY_DIR}/ebml2ConfigVersion.cmake
   DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ebml2)
 
 
